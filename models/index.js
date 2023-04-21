@@ -9,11 +9,11 @@ const db = {};
 let sequelize;
 
 sequelize = new Sequelize(
-  process.env.DB_DATABASE,
-  process.env.DB_USERNAME,
-  process.env.DB_PASSWORD,
+  "agent_book_db",
+  "root",
+  "guess",
   {
-    host: process.env.DB_HOST,
+    host: "127.0.0.1",
     dialect: "mysql",
     pool: {
       max: 5,

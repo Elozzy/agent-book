@@ -2,7 +2,6 @@ const crypto = require("crypto");
 const {
   Sequelize: { Op }
 } = require("sequelize");
-const ErrorHandler = require("./ErrorHandler");
 
 /**
  * @description: generate a random 6 digit numbers
