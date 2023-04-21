@@ -1,0 +1,40 @@
+{
+  "name": "agent-book",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "node ./database/migration/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elozzy/agent-book.git"
+  },
+  "author": "Osagie Eloghosa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Elozzy/agent-book/issues"
+  },
+  "homepage": "https://github.com/Elozzy/agent-book#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mysql2": "^3.2.3",
+    "nodemailer": "^6.9.1",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "prettier": "^2.8.7",
+    "sequelize": "^6.31.0",
+    "swagger-ui-express": "^4.6.2",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  }
+}
