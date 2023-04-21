@@ -13,11 +13,326 @@
       {
         "name": "auth",
         "description": "Everything about signup, sign in, password reset, email verification"
+      },
+      {
+        "name": "card",
+        "description" : "Everything about card creation and others"
       }
     ],
-    "consumes": ["application/json"],
-    "produces": ["application/json"],
-    "paths": {},
-    "definitions":{}
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "securityDefinitions": {
+      "Bearer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "paths": {
+      "/signup": {
+        "post": {
+          "tags": [
+            "auth"
+          ],
+          "summary": "Create an account",
+          "description": "New user can signup",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Input your First name",
+              "required": true,
+              "type": "string",
+              "schema": {
+                "$ref": "#/definitions/signupUser"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "{ success: true, message: 'Signup successful!', data: ''}"
+            },
+            "400": {
+              "description": "{ success: false, error: 'Email already exist.' }"
+            },
+            "500": {
+              "description": "Could not connect to DB"
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "tags": [
+            "auth"
+          ],
+          "summary": "Logs user into the system",
+          "description": "Sign in to generate an access token",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "description": "Input your login data",
+              "required": true,
+              "type": "object",
+              "schema": {
+                "$ref": "#/definitions/loginData"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "{ success: true, message: 'Login successful', token: '' }"
+            },
+            "400": {
+              "description": "{ success: false, message: 'Invalid data supplied' }"
+            },
+            "401": {
+              "description": "{ success: false, message: 'Invalid credential' }"
+            },
+            "500": {
+              "description": "Could not connect to DB"
+            }
+          }
+        }
+      },
+      "/forgot-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Forgot password",
+        "description": "Request for password reset and generate a recovery link",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "enter user email to generate reset link",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/forgotPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{ success: true, message: 'A password reset link has been sent to your mail' }"
+          },
+          "400": {
+            "description": "Email is required"
+          },
+          "404": {
+            "description": "User not found! Please ensure that the email provided is correct"
+          },
+          "500": {
+            "description": "Could not connect to DB"
+          }
+        }
+      }
+    },
+    "/reset-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Password reset",
+        "description": "Reset password",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "resetToken",
+            "in": "query",
+            "description": "Reset token is a part of the recovery link"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Enter new password and confirm it",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resetPassword"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{ success: true, message: 'Password reset successful' }"
+          },
+          "400": {
+            "description": "Password does not match!"
+          },
+          "401": {
+            "description": "Invalid token or Expired token"
+          },
+          "500": {
+            "description": "Could not connect to DB"
+          }
+        }
+      }
+    },
+    "/card/create": {
+      "post": {
+        "tags": [
+          "card"
+        ],
+        "summary": "Create a card",
+        "description": "Endpoint to create a card",
+        "produces": [
+          " application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "object",
+            "schema": {
+              "$ref": "#/definitions/registerCard"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "{ success: true, message: 'card created successfully', data: ''}"
+          },
+          "400": {
+            "description": "Invalid data supplied"
+          },
+          "500": {
+            "description": "Could not connect to DB"
+          }
+        }
+      }
+    },
+    "/card/all-cards": {
+      "get": {
+        "tags": ["card"],
+        "summary": "Get all cards",
+        "description": "Get all cards",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{ success: true, data:card}"
+          },
+          "400": {
+            "description": "{ success: false }"
+          },
+          "500": {
+            "description": "Could not connect to DB"
+          }
+        }
+      }
+    }
+    },
+    "definitions": {
+      "signupUser": {
+        "required": [
+          "firstName",
+          "lastName",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "loginData": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "forgotPassword": {
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "resetPassword": {
+        "required": ["password", "confirmPassword"],
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "registerCard": {
+        "required": [
+          "title",  
+          "selectProject",
+         "cardStage"
+        ],
+        "properties":{
+          "title": {
+            "type": "string"
+          },
+          "selectProject": {
+            "type" : "string",
+            "enum" : [
+              "design",
+              "development",
+              "marketing",
+              "general"
+            ]
+          },
+          "cardStage":{
+            "type": "string",
+            "enum" : [
+              "todo",
+              "backlogs",
+              "inprogress",
+              "inreveiw",
+              "completed"
+            ]
+          }
+        }    
+      }
+    }
   }
   
